@@ -109,7 +109,7 @@ const AIAdvice = () => {
             {/* Header Section */}
             <div className="mb-2 flex-shrink-0">
                 <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter mb-2">
-                    AI Financial Advisor v2.1
+                    AI Financial Advisor
                 </h1>
                 <p className="text-gray-400">Get personalized money tips powered by AI ✨</p>
             </div>

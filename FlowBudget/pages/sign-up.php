@@ -70,9 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
     <style>
         body { font-family: 'Inter', sans-serif; }
+        
+        /* Fix for Chrome/Safari autofill background color */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #09090B inset !important;
+            -webkit-text-fill-color: white !important;
+            caret-color: white !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
     </style>
 </head>
-<body class="bg-dark min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+<body class="bg-dark min-h-screen flex items-center justify-center p-4 relative">
     <!-- Background Gradients -->
     <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px]"></div>
@@ -80,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="max-w-md w-full bg-dark-lighter/50 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/10">
-        <div class="p-8">
+        <div class="p-6">
             <div class="text-center mb-8">
                 <div class="flex justify-center mb-4">
                     <img src="/FlowBudget/logo.png" alt="FlowBudget Logo" class="w-16 h-16 rounded-2xl shadow-[0_0_20px_rgba(204,255,0,0.3)]">
@@ -125,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <button type="submit" 
-                    class="w-full bg-primary hover:bg-primary/90 text-dark font-bold py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(204,255,0,0.4)] hover:scale-[1.02] active:scale-95 mt-2">
+                    class="w-full bg-primary hover:bg-primary/90 text-dark font-bold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(204,255,0,0.4)] hover:scale-[1.02] active:scale-95 mt-2">
                     Sign Up
                 </button>
             </form>

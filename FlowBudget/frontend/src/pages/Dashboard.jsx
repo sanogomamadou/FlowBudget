@@ -5,6 +5,8 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     AreaChart, Area, PieChart, Pie, Cell, Legend
 } from 'recharts';
+import MoneyRadar from '../components/MoneyRadar';
+import SmartActions from '../components/SmartActions';
 
 const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6366F1'];
 
@@ -110,6 +112,12 @@ const Dashboard = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Money Radar Section */}
+            <MoneyRadar />
+
+            {/* SmartActions Section */}
+            <SmartActions />
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
