@@ -207,7 +207,7 @@ const BudgetSavings = () => {
                     <ArrowLeft className="w-6 h-6" />
                 </button>
                 <div>
-                    <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter">
+                    <h2 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter">
                         Budget & Savings
                     </h2>
                     <p className="text-gray-400 font-medium">Manage your spending limits and savings goals</p>
@@ -215,7 +215,7 @@ const BudgetSavings = () => {
             </header>
 
             {/* Tabs */}
-            <div className="flex gap-4 border-b border-white/10">
+            <div className="flex gap-4 border-b border-white/10 overflow-x-auto pb-1">
                 <button
                     onClick={() => setActiveTab('budgets')}
                     className={`px-6 py-3 font-bold transition-all relative ${activeTab === 'budgets' ? 'text-primary' : 'text-gray-400 hover:text-white'

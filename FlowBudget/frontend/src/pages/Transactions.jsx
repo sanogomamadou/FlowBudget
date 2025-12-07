@@ -119,7 +119,7 @@ const Transactions = () => {
         <div className="space-y-6">
             <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                    <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter">Transactions</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter">Transactions</h2>
                     <div className="flex items-center gap-2 mt-1">
                         <p className="text-gray-400 font-medium">Manage your income and expenses.</p>
                         {lastSync && (

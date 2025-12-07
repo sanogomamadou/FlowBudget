@@ -53,7 +53,7 @@ const Operations = () => {
         <div className="space-y-6">
             {/* Header */}
             <div>
-                <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter">
+                <h2 className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter">
                     Banking Operations
                 </h2>
                 <p className="text-gray-400 mt-2">Perform your transactions securely</p>

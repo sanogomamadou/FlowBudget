@@ -110,7 +110,7 @@ const WalletToWalletForm = ({ onClose }) => {
     }
 
     return (
-        <div className="bg-dark-lighter/50 backdrop-blur-xl rounded-3xl p-8 border border-white/10">
+        <div className="bg-dark-lighter/50 backdrop-blur-xl rounded-3xl p-6 md:p-8 border border-white/10">
             <div className="flex items-center gap-4 mb-6">
                 <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500">
                     <ArrowRightLeft className="w-6 h-6 text-white" />

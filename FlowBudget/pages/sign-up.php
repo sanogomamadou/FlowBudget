@@ -94,9 +94,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="p-6">
             <div class="text-center mb-8">
                 <div class="flex justify-center mb-4">
-                    <img src="/FlowBudget/logo.png" alt="FlowBudget Logo" class="w-16 h-16 rounded-2xl shadow-[0_0_20px_rgba(0,168,204,0.4)]">
+                    <img src="/FlowBudget/frontend/dist/logo.png" alt="FlowBudget Logo" class="w-16 h-16 rounded-2xl shadow-[0_0_20px_rgba(0,168,204,0.4)]">
                 </div>
-                <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter mb-2">FlowBudget</h1>
+                <h1 class="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter mb-2">FlowBudget</h1>
                 <p class="text-gray-400 font-medium">Create your account to get started.</p>
             </div>
 
