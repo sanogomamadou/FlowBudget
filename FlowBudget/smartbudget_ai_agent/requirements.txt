@@ -5,3 +5,7 @@ langchain-google-genai
 python-dotenv
 mysql-connector-python
 httpx
+apscheduler
+pydantic
+google-api-python-client>=2.0.0
+langchain-google-community>=0.0.4

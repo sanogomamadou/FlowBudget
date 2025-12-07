@@ -6,6 +6,9 @@ import Transactions from './pages/Transactions';
 import AddTransaction from './pages/AddTransaction';
 import Profile from './pages/Profile';
 import AIAdvice from './pages/AIAdvice';
+import Operations from './pages/Operations';
+import FlowRankPage from './pages/FlowRankPage';
+import BudgetSavings from './pages/BudgetSavings';
 
 function App() {
   return (
@@ -15,8 +18,11 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/add-transaction" element={<AddTransaction />} />
+          <Route path="/operations" element={<Operations />} />
           <Route path="/ai-advice" element={<AIAdvice />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/flow-rank" element={<FlowRankPage />} />
+          <Route path="/budget-savings" element={<BudgetSavings />} />
         </Routes>
       </Layout>
     </Router>

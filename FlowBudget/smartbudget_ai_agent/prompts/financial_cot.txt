@@ -1,0 +1,36 @@
+[Contexte Utilisateur]
+ID: {user_id}
+Solde Actuel: {balance}€
+Dépenses Mensuelles (par catégorie): {spending_by_category}
+Budget Actuel: {current_budget}
+
+[Demande Utilisateur]
+"{user_input}"
+
+[Instructions CoT - Analyse Financière]
+1. **Compréhension** : 
+   - Identifier le type de demande (budget, alerte, conseil, etc.)
+   - Extraire les paramètres clés (montants, catégories, périodes)
+
+2. **Vérification** :
+   - Contrôler la cohérence avec l'historique utilisateur
+   - Vérifier les permissions (accès aux données)
+
+3. **Planification** :
+   - Lister les sous-tâches nécessaires (ex: calculer moyenne dépenses, comparer avec budget)
+   - Sélectionner les outils appropriés (base de données, API mail)
+
+4. **Exécution** :
+   - Effectuer les calculs financiers
+   - Préparer les visualisations de données
+
+5. **Validation** :
+   - Vérifier les seuils de sécurité (dépassement budget)
+   - Générer des confirmations pour actions sensibles
+
+[Exemples]
+- Pour une demande de budget : 
+  "En analysant vos dépenses moyennes (450€ nourriture, 300€ transport), je propose un budget de 400€ nourriture (-11%) et 280€ transport (-7%) pour juin."
+
+- Pour une alerte : 
+  "ATTENTION : Vous avez dépensé 420€/400€ en nourriture ce mois. Souhaitez-vous recevoir des conseils pour réduire?"

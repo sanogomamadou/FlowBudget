@@ -5,8 +5,12 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     AreaChart, Area, PieChart, Pie, Cell, Legend
 } from 'recharts';
+import { X } from 'lucide-react';
 import MoneyRadar from '../components/MoneyRadar';
 import SmartActions from '../components/SmartActions';
+import SmartAlerts from '../components/SmartAlerts';
+import FlowRank from '../components/FlowRank';
+import { getWalletOperations, getWalletBalance } from '../services/walletAPI';
 
 const COLORS = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#6366F1'];
 
@@ -80,6 +84,21 @@ const Dashboard = () => {
                 }));
                 setIncomeCategories(formattedIncCat);
 
+                // 5. Fetch CIH Wallet Operations (Mock API)
+                try {
+                    const walletOps = await getWalletOperations("LAN193541347060000000001");
+                    console.log("CIH Wallet Operations:", walletOps);
+
+                    // 6. Fetch CIH Wallet Balance (Mock API)
+                    const walletBalance = await getWalletBalance("LAN193541347060000000001");
+                    console.log("CIH Wallet Balance:", walletBalance);
+
+                    // TODO: Merge wallet operations with existing transactions
+                    // TODO: Update balance with wallet balance
+                } catch (walletError) {
+                    console.error("Wallet API error:", walletError);
+                }
+
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -98,14 +117,17 @@ const Dashboard = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                     <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter">
-                        Yo, {user?.nom || 'User'} <span className="animate-pulse">👋</span>
+                        Hey, {user?.nom || 'User'} <span className="animate-pulse">👋</span>
                     </h2>
-                    <p className="text-gray-400 mt-1 font-medium">Let's get this bread 🍞</p>
+                    <p className="text-gray-400 mt-1 font-medium">Welcome to your financial dashboard</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex items-center gap-4 w-full md:w-auto">
+                    <div onClick={() => navigate('/flow-rank')}>
+                        <FlowRank userId={user?.id} mode="mini" />
+                    </div>
                     <button
                         onClick={() => navigate('/add-transaction')}
-                        className="flex items-center px-6 py-3 bg-primary text-dark rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(204,255,0,0.4)]"
+                        className="flex-1 md:flex-none flex items-center justify-center px-6 py-3 bg-primary text-white rounded-2xl font-bold hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(0,168,204,0.4)]"
                     >
                         <PlusIcon className="w-5 h-5 mr-2" />
                         Add Transaction
@@ -113,85 +135,31 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Money Radar Section */}
-            <MoneyRadar />
+            {/* Money Radar Section (Now includes Stats) */}
+            <MoneyRadar userId={user?.id} stats={stats} />
 
-            {/* SmartActions Section */}
-            <SmartActions />
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-dark-lighter/50 backdrop-blur-xl rounded-3xl p-6 border border-white/5 hover:border-primary/50 transition-all duration-300 hover:scale-[1.02] group">
-                    <div className="flex items-center justify-between">
-                        <div className="overflow-hidden">
-                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Total Balance</p>
-                            <h3 className="text-base md:text-lg font-bold mt-1 text-white font-display tracking-tight group-hover:text-primary transition-colors leading-tight">
-                                {stats.balance.toFixed(2)} <span className="text-xs text-gray-400 font-normal">MAD</span>
-                            </h3>
-                        </div>
-                        <div className="bg-primary/10 p-3 rounded-2xl flex-shrink-0 ml-2 group-hover:bg-primary group-hover:text-dark transition-all duration-300">
-                            <DollarSign className="w-6 h-6 text-primary group-hover:text-dark transition-colors" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-dark-lighter/50 backdrop-blur-xl rounded-3xl p-6 border border-white/5 hover:border-secondary/50 transition-all duration-300 hover:scale-[1.02] group">
-                    <div className="flex items-center justify-between">
-                        <div className="overflow-hidden">
-                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Total Income</p>
-                            <h3 className="text-base md:text-lg font-bold mt-1 text-primary font-display tracking-tight leading-tight">
-                                +{stats.income.toFixed(2)} <span className="text-xs text-primary/70 font-normal">MAD</span>
-                            </h3>
-                        </div>
-                        <div className="bg-primary/10 p-3 rounded-2xl flex-shrink-0 ml-2 group-hover:bg-primary group-hover:text-dark transition-all duration-300">
-                            <TrendingUp className="w-6 h-6 text-primary group-hover:text-dark transition-colors" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-dark-lighter/50 backdrop-blur-xl rounded-3xl p-6 border border-white/5 hover:border-red-500/50 transition-all duration-300 hover:scale-[1.02] group">
-                    <div className="flex items-center justify-between">
-                        <div className="overflow-hidden">
-                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Total Expenses</p>
-                            <h3 className="text-base md:text-lg font-bold mt-1 text-red-500 font-display tracking-tight leading-tight">
-                                -{stats.expense.toFixed(2)} <span className="text-xs text-red-500/70 font-normal">MAD</span>
-                            </h3>
-                        </div>
-                        <div className="bg-red-500/10 p-3 rounded-2xl flex-shrink-0 ml-2 group-hover:bg-red-500 group-hover:text-white transition-all duration-300">
-                            <TrendingDown className="w-6 h-6 text-red-500 group-hover:text-white transition-colors" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-dark-lighter/50 backdrop-blur-xl rounded-3xl p-6 border border-white/5 hover:border-secondary/50 transition-all duration-300 hover:scale-[1.02] group">
-                    <div className="flex items-center justify-between">
-                        <div className="overflow-hidden">
-                            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Transactions</p>
-                            <h3 className="text-lg xl:text-xl font-bold mt-1 text-white whitespace-nowrap font-display tracking-tight group-hover:text-secondary transition-colors">{stats.transactionsCount}</h3>
-                        </div>
-                        <div className="bg-secondary/10 p-3 rounded-2xl flex-shrink-0 ml-2 group-hover:bg-secondary group-hover:text-white transition-all duration-300">
-                            <PieIcon className="w-6 h-6 text-secondary group-hover:text-white transition-colors" />
-                        </div>
-                    </div>
-                </div>
+            {/* Alerts & SmartActions Horizontal Split */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+                <SmartAlerts userId={user?.id} />
+                <SmartActions userId={user?.id} />
             </div>
 
             {/* Charts Section */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Income vs Expense Chart */}
                 <div className="bg-dark-lighter/50 backdrop-blur-xl rounded-3xl p-8 border border-white/5 shadow-lg">
-                    <h3 className="text-xl font-bold text-white mb-6 font-display">Money Flow 💸</h3>
+                    <h3 className="text-xl font-bold text-white mb-6 font-display">Cash Flow 💸</h3>
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={monthlyData}>
                                 <defs>
                                     <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#CCFF00" stopOpacity={0.3} />
-                                        <stop offset="95%" stopColor="#CCFF00" stopOpacity={0} />
+                                        <stop offset="5%" stopColor="#00A8CC" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="#00A8CC" stopOpacity={0} />
                                     </linearGradient>
                                     <linearGradient id="colorExpense" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
-                                        <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+                                        <stop offset="5%" stopColor="#FF6B35" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="#FF6B35" stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
@@ -220,7 +188,7 @@ const Dashboard = () => {
                                 <Area
                                     type="monotone"
                                     dataKey="income"
-                                    stroke="#CCFF00"
+                                    stroke="#00A8CC"
                                     strokeWidth={3}
                                     fillOpacity={1}
                                     fill="url(#colorIncome)"
@@ -228,7 +196,7 @@ const Dashboard = () => {
                                 <Area
                                     type="monotone"
                                     dataKey="expense"
-                                    stroke="#ef4444"
+                                    stroke="#FF6B35"
                                     strokeWidth={3}
                                     fillOpacity={1}
                                     fill="url(#colorExpense)"
@@ -240,7 +208,7 @@ const Dashboard = () => {
 
                 {/* Categories Chart */}
                 <div className="bg-dark-lighter/50 backdrop-blur-xl rounded-3xl p-8 border border-white/5 shadow-lg">
-                    <h3 className="text-xl font-bold text-white mb-6 font-display">Where it goes 📉</h3>
+                    <h3 className="text-xl font-bold text-white mb-6 font-display">Expense Breakdown 📊</h3>
                     <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
@@ -279,7 +247,12 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-        </div>
+
+
+
+
+            {/* Gamification Modal Removed - Now a separate page */}
+        </div >
     );
 };
 

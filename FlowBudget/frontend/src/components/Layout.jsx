@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, CreditCard, User, Bot, LogOut } from 'lucide-react';
+import { LayoutDashboard, CreditCard, User, Bot, LogOut, ArrowRightLeft, PiggyBank } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 const Layout = ({ children }) => {
@@ -9,6 +9,8 @@ const Layout = ({ children }) => {
     const navItems = [
         { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
         { icon: CreditCard, label: 'Transactions', path: '/transactions' },
+        { icon: ArrowRightLeft, label: 'Operations', path: '/operations' },
+        { icon: PiggyBank, label: 'Budget & Savings', path: '/budget-savings' },
         { icon: Bot, label: 'AI Advice', path: '/ai-advice' },
         { icon: User, label: 'Profile', path: '/profile' },
     ];
@@ -19,7 +21,7 @@ const Layout = ({ children }) => {
             <aside className="fixed inset-y-0 left-0 z-50 w-64 bg-dark-lighter/50 backdrop-blur-xl border-r border-white/10 shadow-2xl transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-auto">
                 <div className="p-6">
                     <div className="flex items-center gap-3 mb-8">
-                        <img src="/FlowBudget/frontend/dist/logo.png" alt="FlowBudget Logo" className="w-10 h-10 rounded-xl shadow-[0_0_15px_rgba(204,255,0,0.3)]" />
+                        <img src="/FlowBudget/frontend/dist/logo.png" alt="FlowBudget Logo" className="w-10 h-10 rounded-xl shadow-[0_0_15px_rgba(0,168,204,0.4)]" />
                         <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter">
                             FlowBudget
                         </h1>
@@ -35,7 +37,7 @@ const Layout = ({ children }) => {
                                     className={cn(
                                         "flex items-center px-4 py-3.5 text-sm font-medium rounded-2xl transition-all duration-300 group",
                                         isActive
-                                            ? "bg-primary text-dark shadow-[0_0_20px_rgba(204,255,0,0.3)] scale-[1.02]"
+                                            ? "bg-primary text-white shadow-[0_0_20px_rgba(0,168,204,0.3)] scale-[1.02]"
                                             : "text-gray-400 hover:bg-white/5 hover:text-white hover:scale-[1.02]"
                                     )}
                                 >

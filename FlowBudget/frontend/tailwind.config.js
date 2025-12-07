@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#CCFF00", // Acid Green
-        secondary: "#D946EF", // Electric Purple
+        primary: "#FF6B35", // CIH Orange
+        secondary: "#00A8CC", // CIH Blue
         dark: "#09090B", // Deep Black
         "dark-lighter": "#18181B", // Zinc 900
         light: "#F4F4F5", // Zinc 100

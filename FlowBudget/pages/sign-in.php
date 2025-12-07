@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     colors: {
                         dark: '#09090B',
                         'dark-lighter': '#18181B',
-                        primary: '#CCFF00',
-                        secondary: '#D946EF',
+                        primary: '#FF6B35', // CIH Orange
+                        secondary: '#00A8CC', // CIH Blue
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -87,10 +87,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="p-6">
             <div class="text-center mb-6">
                 <div class="flex justify-center mb-4">
-                    <img src="/FlowBudget/logo.png" alt="FlowBudget Logo" class="w-16 h-16 rounded-2xl shadow-[0_0_20px_rgba(204,255,0,0.3)]">
+                    <img src="/FlowBudget/logo.png" alt="FlowBudget Logo" class="w-16 h-16 rounded-2xl shadow-[0_0_20px_rgba(0,168,204,0.4)]">
                 </div>
                 <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter mb-2">FlowBudget</h1>
-                <p class="text-gray-400 font-medium">Welcome back! Let's get this bread 🍞</p>
+                <p class="text-gray-400 font-medium">Welcome back to your financial dashboard</p>
             </div>
 
             <?php if ($error_message): ?>
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <button type="submit" 
-                    class="w-full bg-primary hover:bg-primary/90 text-dark font-bold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(204,255,0,0.4)] hover:scale-[1.02] active:scale-95">
+                    class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(0,168,204,0.4)] hover:scale-[1.02] active:scale-95">
                     Sign In
                 </button>
             </form>

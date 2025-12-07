@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowUpRight, ArrowDownLeft, Search, Filter } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, Search, Filter, Wallet } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { getWalletOperations } from '../services/walletAPI';
 
 const Transactions = () => {
     const [transactions, setTransactions] = useState([]);
@@ -10,21 +11,76 @@ const Transactions = () => {
     const [showFilters, setShowFilters] = useState(false);
     const [sortBy, setSortBy] = useState('date-desc'); // date-desc, date-asc, amount-desc, amount-asc
     const [dateRange, setDateRange] = useState('all'); // all, this-month, last-month
+    const [lastSync, setLastSync] = useState(null);
+
+    // Transform wallet operation to transaction format
+    const transformWalletOperation = (op) => ({
+        id: `wallet-${op.referenceId}`,
+        type: op.type === 'MMD' || op.type === 'CASHIN' ? 'Revenu' : 'Dépense',
+        categorie: op.clientNote || op.type,
+        montant: op.amount,
+        date: new Date(op.date).toISOString(),
+        description: `${op.beneficiaryFirstName || ''} ${op.beneficiaryLastName || ''}`.trim() || 'Wallet Transaction',
+        source: 'wallet', // Mark as wallet transaction
+        fees: op.Fees,
+        status: op.status,
+        referenceId: op.referenceId
+    });
+
+    const fetchTransactions = async () => {
+        try {
+            // 1. Fetch manual transactions from PHP API
+            const manualResponse = await fetch('/FlowBudget/pages/api/getTransactions.php');
+            const manualData = await manualResponse.json();
+
+            // 2. Fetch wallet operations from CIH API (mock)
+            const walletData = await getWalletOperations("LAN193541347060000000001");
+            const walletOperations = walletData.result.filter(op => op.status === '000');
+
+            // 3. Sync wallet transactions to database (only new ones)
+            for (const op of walletOperations) {
+                try {
+                    await fetch('/FlowBudget/pages/api/saveWalletTransaction.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(op)
+                    });
+                } catch (syncError) {
+                    console.error('Error syncing transaction:', syncError);
+                }
+            }
+
+            // 4. Re-fetch manual transactions (now includes synced wallet transactions)
+            const updatedResponse = await fetch('/FlowBudget/pages/api/getTransactions.php');
+            const updatedData = await updatedResponse.json();
+
+            // 5. Transform wallet operations for display
+            const walletTransactions = walletOperations.map(transformWalletOperation);
+
+            // 6. Merge both sources (DB transactions + live wallet display)
+            const allTransactions = [
+                ...updatedData.map(t => ({ ...t, source: 'manual' })),
+                ...walletTransactions
+            ];
+
+            setTransactions(allTransactions);
+            setLastSync(new Date());
+            setLoading(false);
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchTransactions = async () => {
-            try {
-                const response = await fetch('/FlowBudget/pages/api/getTransactions.php');
-                const data = await response.json();
-                setTransactions(data);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching transactions:", error);
-                setLoading(false);
-            }
-        };
-
         fetchTransactions();
+
+        // Auto-refresh every 30 seconds
+        const interval = setInterval(() => {
+            fetchTransactions();
+        }, 30000);
+
+        return () => clearInterval(interval);
     }, []);
 
     const filteredTransactions = transactions.filter(t => {
@@ -64,7 +120,14 @@ const Transactions = () => {
             <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary font-display tracking-tighter">Transactions</h2>
-                    <p className="text-gray-400 font-medium">Manage your income and expenses.</p>
+                    <div className="flex items-center gap-2 mt-1">
+                        <p className="text-gray-400 font-medium">Manage your income and expenses.</p>
+                        {lastSync && (
+                            <span className="text-xs text-gray-500">
+                                • Synced {Math.floor((new Date() - lastSync) / 1000)}s ago
+                            </span>
+                        )}
+                    </div>
                 </div>
                 <div className="flex items-center gap-3 relative">
                     <div className="relative">
@@ -157,7 +220,7 @@ const Transactions = () => {
                                         <div className="flex items-center gap-3">
                                             <div className={cn(
                                                 "w-10 h-10 rounded-full flex items-center justify-center transition-transform group-hover:scale-110",
-                                                t.type === 'Revenu' ? "bg-primary/10 text-primary" : "bg-red-500/10 text-red-500"
+                                                t.type === 'Revenu' ? "bg-secondary/10 text-secondary" : "bg-primary/10 text-primary"
                                             )}>
                                                 {t.type === 'Revenu' ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
                                             </div>
@@ -165,14 +228,22 @@ const Transactions = () => {
                                         </div>
                                     </td>
                                     <td className="py-4 px-6">
-                                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/5 text-gray-300 border border-white/5">
-                                            {t.categorie}
-                                        </span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="px-3 py-1 rounded-full text-xs font-medium bg-white/5 text-gray-300 border border-white/5">
+                                                {t.categorie}
+                                            </span>
+                                            {t.source === 'wallet' && (
+                                                <span className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/30">
+                                                    <Wallet className="w-3 h-3" />
+                                                    CIH
+                                                </span>
+                                            )}
+                                        </div>
                                     </td>
                                     <td className="py-4 px-6 text-gray-400 text-sm">{new Date(t.date).toLocaleDateString()}</td>
                                     <td className={cn(
                                         "py-4 px-6 text-right font-bold font-display",
-                                        t.type === 'Revenu' ? "text-primary" : "text-white"
+                                        t.type === 'Revenu' ? "text-secondary" : "text-primary"
                                     )}>
                                         {t.type === 'Revenu' ? '+' : '-'}{parseFloat(t.montant).toFixed(2)} MAD
                                     </td>
